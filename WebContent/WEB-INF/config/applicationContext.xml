@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+
+
+<!-- 	enables transaction annotations -->
+	<tx:annotation-driven/>
+
+	<bean id="dataSource" class= "org.apache.commons.dbcp.BasicDataSource">
+	
+		<property name= "driverClassName" value= "oracle.jdbc.driver.OracleDriver"/>
+		<property name= "url" value= "jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name= "username" value= "admin"/>
+		<property name= "password" value= "admin"/>
+		
+	</bean>
+		
+	
+	<bean id="sessionFactory" class= "org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name= "dataSource" ref= "dataSource"/>
+		
+		<property name= "hibernateProperties">
+			<props>
+				<prop key= "hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key= "hibernate.show_sql">true</prop>
+				<prop key= "hibernate.hbm2ddl.auto">update</prop>			
+			</props>
+		</property>
+	
+		<property name="packagesToScan" value= "net.mv.*"/>
+	</bean>
+			
+		
+	<bean id="transactionManager" class= "org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name= "sessionFactory" ref= "sessionFactory"/>
+	</bean>
+
+
+<!-- 	<bean id="LoginDAO" class="net.mv.DAO.LoginDAO" /> -->
+<!-- 	<bean id="LoginService" class="net.mv.service.LoginService" /> -->
+<!-- 	<bean id="PublicationServlet" class="net.mv.servlet.PublicationServlet" /> -->
+
+	
+	<context:component-scan base-package="net.mv.*" />
+	
+	<tx:annotation-driven/>
+	
+	
+<!-- 	<bean id="publicationServlet" name="/pages/sign" class="net.mv.servlets.PublicationServlet"></bean> -->
+	
+</beans>
